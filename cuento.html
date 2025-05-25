@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Generador de Cuento - FitZone</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <nav class="menu">
+    <ul>
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="tienda.html">Nuestra Tienda</a></li>
+      <li><a href="servicios.html">Servicios</a></li>
+      <li><a href="cotizacion.html">Cotización</a></li>
+      <li><a href="contacto.html">Contáctenos</a></li>
+      <li><a href="cuento.html">Cuento</a></li>
+    </ul>
+  </nav>
+
+  <section class="seccion">
+    <h2>Generador de Cuento de Entrenamiento</h2>
+    <form id="formularioCuento">
+      <label for="nombre">Nombres y Apellidos:</label>
+      <input type="text" id="nombre" name="nombre" required>
+
+      <label for="apodo">Apodo:</label>
+      <input type="text" id="apodo" name="apodo" required>
+
+      <label for="cabello">Color de Cabello:</label>
+      <input type="text" id="cabello" name="cabello" required>
+
+      <label for="ojos">Color de Ojos:</label>
+      <input type="text" id="ojos" name="ojos" required>
+
+      <label for="edad">Edad:</label>
+      <input type="number" id="edad" name="edad" min="1" required>
+
+      <label for="hobby">Hobby Favorito:</label>
+      <input type="text" id="hobby" name="hobby" required>
+
+      <button type="submit">Continuar</button>
+    </form>
+
+    <div id="cuentoGenerado" class="seccion" style="display:none; margin-top: 30px;"></div>
+  </section>
+
+  <script>
+    document.getElementById('formularioCuento').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const nombre = document.getElementById('nombre').value;
+      const apodo = document.getElementById('apodo').value;
+      const cabello = document.getElementById('cabello').value;
+      const ojos = document.getElementById('ojos').value;
+      const edad = document.getElementById('edad').value;
+      const hobby = document.getElementById('hobby').value;
+
+      const cuento = `
+        <h3>Un entrenamiento especial...</h3>
+        <p>${nombre}, conocido entre sus amigos como <strong>${apodo}</strong>, era una persona apasionada por el deporte.
+        Tenía <strong>${edad}</strong> años, cabello color <strong>${cabello}</strong> y unos ojos <strong>${ojos}</strong> que brillaban de energía cada vez que entrenaba.</p>
+
+        <p>Su mayor hobby era <strong>${hobby}</strong>, pero su verdadera pasión era entrenar con los productos de <strong>FitZone</strong>.
+        Cada mañana, <strong>${apodo}</strong> se levantaba temprano, tomaba sus implementos favoritos y comenzaba su rutina con disciplina y alegría.</p>
+
+        <p>Gracias a FitZone, no solo mejoró su rendimiento, sino que también inspiró a otros a llevar un estilo de vida saludable.
+        Su constancia y entusiasmo demostraron que, con las herramientas adecuadas, cualquiera puede alcanzar sus metas.</p>
+
+        <p>Y así, día tras día, <strong>${apodo}</strong> se convirtió en un ejemplo de esfuerzo, energía y compromiso.</p>
+      `;
+
+      const contenedor = document.getElementById('cuentoGenerado');
+      contenedor.innerHTML = cuento;
+      contenedor.style.display = 'block';
+    });
+  </script>
+</body>
+</html>

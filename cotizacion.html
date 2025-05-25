@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cotización - FitZone</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <nav class="menu">
+    <ul>
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="tienda.html">Nuestra Tienda</a></li>
+      <li><a href="servicios.html">Servicios</a></li>
+      <li><a href="contacto.html">Contáctenos</a></li>
+	  <li><a href="cuento.html">Cuento</a></li>
+    </ul>
+  </nav>
+
+  <section class="seccion">
+    <h2>Solicitud de Cotización</h2>
+    <form>
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre" required />
+
+      <label for="producto">Producto deseado:</label>
+      <input type="text" id="producto" name="producto" required />
+
+      <label for="cantidad">Cantidad:</label>
+      <input type="number" id="cantidad" name="cantidad" min="1" required />
+
+      <label for="comentarios">Comentarios:</label>
+      <textarea id="comentarios" name="comentarios"></textarea>
+
+      <button type="submit">Enviar solicitud</button>
+    </form>
+  </section>
+</body>
+</html>
