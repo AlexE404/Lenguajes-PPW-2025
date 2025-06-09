@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resumen de Cotización</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    .contenedor {
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 2rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+    }
+    h2, h3 {
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 0.5rem;
+      text-align: left;
+    }
+    th {
+      background-color: #e2e2e2;
+    }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <h2>Resumen de Cotización</h2>
+    <div id="infoCliente"></div>
+    <h3>Productos Seleccionados:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Precio Unitario</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody id="tablaProductos"></tbody>
+      <tfoot>
+        <tr>
+          <th colspan="3">Total General</th>
+          <th id="totalGeneral"></th>
+        </tr>
+      </tfoot>
+    </table>
+    <div style="margin-top: 2rem;">
+      <button onclick="window.location.href='index.html'">Volver al Inicio</button>
+    </div>
+  </div>
+  <script>
+  async function cargarResumen() {
+    try {
+      const response = await fetch('http://localhost:3000/cotizaciones');
+      if (!response.ok) throw new Error('Error al obtener las cotizaciones');
+      const datos = await response.json();
+
+      if (datos.length === 0) {
+        document.body.innerHTML = '<p style="text-align:center;">No hay cotizaciones guardadas.</p>';
+        return;
+      }
+
+      // Mostrar solo la última cotización (últimas filas)
+      const ultimaCotizacion = datos.slice(-1 * datos.filter(d => d.Nombre === datos[datos.length - 1].Nombre).length);
+      const cliente = ultimaCotizacion[0];
+
+      document.getElementById('infoCliente').innerHTML = `
+        <p><strong>Nombre:</strong> ${cliente.Nombre}</p>
+        <p><strong>Ciudad:</strong> ${cliente.Ciudad}</p>
+        <p><strong>Dirección:</strong> ${cliente.Dirección}</p>
+        <p><strong>Celular:</strong> ${cliente.Celular}</p>
+      `;
+
+      let totalGeneral = 0;
+      const tabla = document.getElementById('tablaProductos');
+      ultimaCotizacion.forEach(p => {
+        totalGeneral += p.Total;
+        const fila = document.createElement('tr');
+        fila.innerHTML = `
+          <td>${p.Producto}</td>
+          <td>${p.Cantidad}</td>
+          <td>$${p.Precio.toLocaleString()}</td>
+          <td>$${p.Total.toLocaleString()}</td>
+        `;
+        tabla.appendChild(fila);
+      });
+
+      document.getElementById('totalGeneral').textContent = `$${totalGeneral.toLocaleString()}`;
+
+    } catch (err) {
+      console.error(err);
+      document.body.innerHTML = '<p style="text-align:center;">Error al cargar la cotización.</p>';
+    }
+  }
+
+  cargarResumen();
+</script>
+</body>
+</html>
