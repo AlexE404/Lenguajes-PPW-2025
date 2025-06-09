@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cotización - FitZone</title>
+  <title>Solicitud de Cotización - FitZone</title>
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
@@ -20,21 +19,107 @@
 
   <section class="seccion">
     <h2>Solicitud de Cotización</h2>
-    <form>
-      <label for="nombre">Nombre:</label>
+    <form id="formCotizacion">
+      <label for="nombre">Nombres y Apellidos:</label>
       <input type="text" id="nombre" name="nombre" required />
 
-      <label for="producto">Producto deseado:</label>
-      <input type="text" id="producto" name="producto" required />
+      <label for="ciudad">Ciudad:</label>
+      <select id="ciudad" name="ciudad" required>
+        <option value="">Seleccione...</option>
+        <option value="Medellín">Medellín</option>
+        <option value="Bogotá">Bogotá</option>
+        <option value="Cali">Cali</option>
+        <option value="Barranquilla">Barranquilla</option>
+        <option value="Otra">Otra</option>
+      </select>
 
-      <label for="cantidad">Cantidad:</label>
-      <input type="number" id="cantidad" name="cantidad" min="1" required />
+      <label for="direccion">Dirección:</label>
+      <input type="text" id="direccion" name="direccion" required />
 
-      <label for="comentarios">Comentarios:</label>
-      <textarea id="comentarios" name="comentarios"></textarea>
+      <label for="celular">Celular:</label>
+      <input type="text" id="celular" name="celular" required />
 
-      <button type="submit">Enviar solicitud</button>
+      <h3>Seleccione los productos:</h3>
+      <div>
+        <input type="checkbox" id="mancuernas" name="producto" value="Mancuernas" />
+        <label for="mancuernas">Mancuernas ($50.000)</label>
+        <input type="number" id="cant_mancuernas" name="cant_mancuernas" placeholder="Cantidad" min="1" />
+      </div>
+
+      <div>
+        <input type="checkbox" id="bandas" name="producto" value="Bandas Elásticas" />
+        <label for="bandas">Bandas Elásticas ($30.000)</label>
+        <input type="number" id="cant_bandas" name="cant_bandas" placeholder="Cantidad" min="1" />
+      </div>
+
+      <div>
+        <input type="checkbox" id="guantes" name="producto" value="Guantes" />
+        <label for="guantes">Guantes ($25.000)</label>
+        <input type="number" id="cant_guantes" name="cant_guantes" placeholder="Cantidad" min="1" />
+      </div>
+
+      <div>
+        <input type="checkbox" id="tapete" name="producto" value="Tapete de Yoga" />
+        <label for="tapete">Tapete de Yoga ($40.000)</label>
+        <input type="number" id="cant_tapete" name="cant_tapete" placeholder="Cantidad" min="1" />
+      </div>
+
+      <div style="margin-top: 20px;">
+        <button type="submit">Enviar datos</button>
+        <button type="button" onclick="window.location.href='index.html'">Cancelar</button>
+      </div>
     </form>
   </section>
-</body>
-</html>
+
+  <script>
+  document.getElementById('formCotizacion').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const data = {
+      nombre: document.getElementById('nombre').value,
+      ciudad: document.getElementById('ciudad').value,
+      direccion: document.getElementById('direccion').value,
+      celular: document.getElementById('celular').value,
+      productos: []
+    };
+
+    const productos = [
+      { id: 'mancuernas', nombre: 'Mancuernas', cantidadId: 'cant_mancuernas', precio: 50000 },
+      { id: 'bandas', nombre: 'Bandas Elásticas', cantidadId: 'cant_bandas', precio: 30000 },
+      { id: 'guantes', nombre: 'Guantes', cantidadId: 'cant_guantes', precio: 25000 },
+      { id: 'tapete', nombre: 'Tapete de Yoga', cantidadId: 'cant_tapete', precio: 40000 }
+    ];
+
+    productos.forEach(p => {
+      if (document.getElementById(p.id).checked) {
+        const cantidad = parseInt(document.getElementById(p.cantidadId).value) || 0;
+        if (cantidad > 0) {
+          data.productos.push({
+            nombre: p.nombre,
+            cantidad: cantidad,
+            precio: p.precio,
+            total: cantidad * p.precio
+          });
+        }
+      }
+    });
+
+    try {
+      const response = await fetch('http://localhost:3000/guardar-cotizacion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        alert('Cotización enviada y guardada en Excel.');
+        window.location.href = 'resumen.html';
+      } else {
+        alert('Error al guardar la cotización.');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error de conexión con el servidor.');
+    }
+  });
+</script>
